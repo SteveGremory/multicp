@@ -36,13 +36,13 @@ pub fn copy(from: path::PathBuf, to: path::PathBuf) -> io::Result<()> {
 
             let input_fp = fs::File::open(&input_path).expect("Failed to open input file.");
 
-            let input_modtime =
-                FileTime::from_last_modification_time(&input_fp.metadata().unwrap());
+            let input_mtime = FileTime::from_last_modification_time(&input_fp.metadata().unwrap());
+            let input_atime = FileTime::from_last_access_time(&input_fp.metadata().unwrap());
 
             fs::copy(input_path, &output_path).unwrap();
 
-            filetime::set_file_mtime(output_path, input_modtime)
-                .expect("Failed to set last modified time of the file.");
+            filetime::set_file_times(output_path, input_atime, input_mtime)
+                .expect("Failed to set mtime and atime.");
         });
 
         write_handles.push(handle);

@@ -3,11 +3,23 @@ use std::path::PathBuf;
 use multicp::copy;
 use std::io;
 
-fn main() -> io::Result<()> {
-    let from = PathBuf::from("/Users/steve/Downloads");
-    let to = PathBuf::from("idk");
+use clap::Parser;
 
-    copy(from, to)?;
+#[derive(Parser, Debug)]
+#[command(author, version, about = "A faster cp")]
+
+struct Args {
+    /// Input file/folder
+    from: PathBuf,
+
+    /// Output file/folder
+    to: PathBuf,
+}
+
+fn main() -> io::Result<()> {
+    let args = Args::parse();
+
+    copy(args.from, args.to)?;
 
     Ok(())
 }
