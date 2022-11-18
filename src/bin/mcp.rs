@@ -1,14 +1,13 @@
-use std::path::Path;
+use std::path::PathBuf;
 
 use multicp::copy;
-use tokio::io;
+use std::io;
 
-#[tokio::main]
-async fn main() -> io::Result<()> {
-    let from = Path::new("/Users/steve/Downloads");
-    let to = Path::new("idk");
+fn main() -> io::Result<()> {
+    let from = PathBuf::from("/Users/steve/Downloads");
+    let to = PathBuf::from("idk");
 
-    copy(from.to_path_buf(), to.to_path_buf()).await?;
+    copy(from, to)?;
 
     Ok(())
 }

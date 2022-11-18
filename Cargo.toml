@@ -7,5 +7,8 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.21.2", features = ["full"] }
-walkdir = "2"
+jwalk = "0.6.0"
 filetime = "0.2.18"
+
+[profile.release]
+debug = true
