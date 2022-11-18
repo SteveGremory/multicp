@@ -1,9 +1,8 @@
-use std::path::PathBuf;
-
+// Made by SteveGremory: Licenced under the MIT license.
+use clap::Parser;
 use multicp::copy;
 use std::io;
-
-use clap::Parser;
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "A faster cp")]

@@ -9,4 +9,5 @@ Basically, if monke copy with MultiCP, monke no modify file, monke faster transf
 To install it, run:
 `cargo install --path .`
 
-To run it, run `mcp --help`.
+## Usage
+To comprehend how to use this, run `mcp --help`.

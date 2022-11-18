@@ -1,3 +1,5 @@
+// Made by SteveGremory: Licenced under the MIT license.
+
 use filetime::FileTime;
 use jwalk::WalkDir;
 use std::{
