@@ -20,7 +20,7 @@ async fn file_eq(f1: &path::PathBuf, f2: &path::PathBuf) -> io::Result<bool> {
 pub async fn copy(from: path::PathBuf, to: path::PathBuf) -> io::Result<()> {
     let mut tasks = Vec::new();
 
-    let semaphore = Arc::new(Semaphore::new(256));
+    let semaphore = Arc::new(Semaphore::new(30));
 
     for entry in WalkDir::new(&from) {
         let permit = semaphore.clone().acquire_owned().await.unwrap();
