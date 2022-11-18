@@ -16,10 +16,11 @@ struct Args {
     to: PathBuf,
 }
 
-fn main() -> io::Result<()> {
+#[tokio::main]
+async fn main() -> io::Result<()> {
     let args = Args::parse();
 
-    copy(args.from, args.to)?;
+    copy(args.from, args.to).await?;
 
     Ok(())
 }
