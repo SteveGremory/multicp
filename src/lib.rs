@@ -34,17 +34,12 @@ pub fn copy(from: path::PathBuf, to: path::PathBuf) -> io::Result<()> {
 
             fs::create_dir_all(output_path.parent().unwrap()).expect("Failed to create dirs");
 
-            let input_fp = fs::File::open(input_path).expect("Failed to open input file.");
-            let output_fp = fs::File::create(&output_path)
-                .unwrap_or_else(|_| panic!("Failed to open output file {}", output_path.display()));
+            let input_fp = fs::File::open(&input_path).expect("Failed to open input file.");
 
             let input_modtime =
                 FileTime::from_last_modification_time(&input_fp.metadata().unwrap());
 
-            let mut input_reader = io::BufReader::new(input_fp);
-            let mut output_writer = io::BufWriter::new(output_fp);
-
-            io::copy(&mut input_reader, &mut output_writer).expect("Failed to copy files.");
+            fs::copy(input_path, &output_path).unwrap();
 
             filetime::set_file_mtime(output_path, input_modtime)
                 .expect("Failed to set last modified time of the file.");
