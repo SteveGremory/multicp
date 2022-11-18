@@ -1,7 +1,8 @@
 use filetime::FileTime;
 use jwalk::WalkDir;
 use std::path::{self};
-use std::{fs, io, thread};
+use std::{fs, io};
+use threadpool::ThreadPool;
 
 fn file_eq(f1: &path::PathBuf, f2: &path::PathBuf) -> io::Result<bool> {
     let f1_meta = fs::metadata(f1)?;
@@ -15,7 +16,8 @@ fn file_eq(f1: &path::PathBuf, f2: &path::PathBuf) -> io::Result<bool> {
 }
 
 pub fn copy(from: path::PathBuf, to: path::PathBuf) -> io::Result<()> {
-    let mut write_handles = Vec::new();
+    let num_threads = num_cpus::get();
+    let pool = ThreadPool::new(num_threads);
 
     for entry in WalkDir::new(&from) {
         let input_path = entry?.path();
@@ -27,29 +29,25 @@ pub fn copy(from: path::PathBuf, to: path::PathBuf) -> io::Result<()> {
         let to = to.clone();
         let output_path = to.join(input_path.strip_prefix(from).unwrap());
 
-        let handle = thread::spawn(|| {
+        pool.execute(move || {
             if output_path.exists() && file_eq(&input_path, &output_path).unwrap() {
                 return;
             }
 
-            fs::create_dir_all(output_path.parent().unwrap()).expect("Failed to create dirs");
+            fs::create_dir_all(output_path.parent().unwrap()).expect("Failed to create dirs.");
 
             let input_fp = fs::File::open(&input_path).expect("Failed to open input file.");
 
-            let input_mtime = FileTime::from_last_modification_time(&input_fp.metadata().unwrap());
-            let input_atime = FileTime::from_last_access_time(&input_fp.metadata().unwrap());
+            let input_mtime: FileTime =
+                FileTime::from_last_modification_time(&input_fp.metadata().unwrap());
+            let input_atime: FileTime =
+                FileTime::from_last_access_time(&input_fp.metadata().unwrap());
 
             fs::copy(input_path, &output_path).unwrap();
 
             filetime::set_file_times(output_path, input_atime, input_mtime)
                 .expect("Failed to set mtime and atime.");
         });
-
-        write_handles.push(handle);
-    }
-
-    for handle in write_handles {
-        handle.join().unwrap();
     }
 
     Ok(())
