@@ -2,7 +2,7 @@
 
 Just a `cp` implementation which uses the `clonefile`, `copy_file_range` (TODO), `CopyFileEx` (TODO) syscalls on macOS, Linux and Windows respectively, which makes it faster than normal cp without any flags.
 
-TODO: Add argparsing, Re-implement multi-threading and OS-specific functionality for Linux and Windows
+TODO: Add argparsing, Re-implement multi-threading and OS-specific functionality for Windows
 
 ## Installation
 
