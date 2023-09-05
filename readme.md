@@ -1,13 +1,14 @@
-# MultiCP
-Just a multithreaded version of `cp` which uses the `fcopyfile`, `copy_file_range`, `CopyFileEx` syscalls on macOS, Linux and Windows respectively (abstracted by the Rust Standard lib's in the form of `fs::copy`), which makes it faster than normal cp.
+# MCP
 
-If a directory has been copied over by MultiCP before and some files inside the folder have not been modified, then they will be skipped if there are no changes among the new and the old file upon a re-copy. 
+Just a `cp` implementation which uses the `clonefile`, `copy_file_range` (TODO), `CopyFileEx` (TODO) syscalls on macOS, Linux and Windows respectively, which makes it faster than normal cp without any flags.
 
-Basically, if monke copy with MultiCP, monke no modify file, monke faster transfer speed because monke no copy unchanged files.
+TODO: Add argparsing, Re-implement multi-threading and OS-specific functionality for Linux and Windows
 
 ## Installation
+
 To install it, run:
-`cargo install --path .`
+`cmake . -Bbuild && cd build && make install`
 
 ## Usage
+
 To comprehend how to use this, run `mcp --help`.
