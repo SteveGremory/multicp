@@ -11,7 +11,6 @@ void copy(const char* src, const char* dst) {
 	if (clonefile(src, dst, (uint32_t)0) != 0) {
 		perror("Failed to clone the file");
 	}
-
 #else
 
 	FILE *reader = NULL, *writer = NULL;
@@ -23,7 +22,29 @@ void copy(const char* src, const char* dst) {
 		perror("Could not open the reader/writer");
 	}
 
+#ifdef __linux__
+	struct stat  stat;
+	size_t len = 0, ret = 0;
+	if (fstat(reader->_fileno, &stat) == -1) {
+		perror("Fstat has failed");	
+		exit(EXIT_FAILURE);
+	}
+
+	len = stat.st_size;
+
+	do {
+		ret = copy_file_range(reader->_fileno, NULL, writer->_fileno, NULL, len, 0);
+		if (ret == -1) {
+			perror("copy_file_range");
+			exit(EXIT_FAILURE);
+		}
+
+		len -= ret;
+	} while (len > 0 && ret > 0);
+
+#else
 	stack_buffer_copy(reader, writer);
+#endif
 
 	fclose(reader);
 	fclose(writer);
