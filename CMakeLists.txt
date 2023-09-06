@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(mcp source/main.cc source/mcp.cc)
+add_executable(mcp source/main.cpp source/mcp.cpp)
 target_include_directories(mcp PRIVATE source/)

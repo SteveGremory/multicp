@@ -23,17 +23,18 @@ void copy(const char* src, const char* dst) {
 	}
 
 #ifdef __linux__
-	struct stat  stat;
+	struct stat stat;
 	size_t len = 0, ret = 0;
 	if (fstat(reader->_fileno, &stat) == -1) {
-		perror("Fstat has failed");	
+		perror("Fstat has failed");
 		exit(EXIT_FAILURE);
 	}
 
 	len = stat.st_size;
 
 	do {
-		ret = copy_file_range(reader->_fileno, NULL, writer->_fileno, NULL, len, 0);
+		ret = copy_file_range(reader->_fileno, NULL, writer->_fileno, NULL, len,
+							  0);
 		if (ret == -1) {
 			perror("copy_file_range");
 			exit(EXIT_FAILURE);
@@ -64,7 +65,7 @@ size_t stack_buffer_copy(FILE* reader, FILE* writer) {
 	size_t total_bytes = 0;
 	size_t bytes_read = 0;
 
-	char* buffer = (char*)malloc(BUFFSIZE);
+	char buffer[BUFFSIZE];
 
 	while ((bytes_read = fread(buffer, 1, BUFFSIZE, reader)) != 0) {
 		if (ferror(reader)) {
@@ -75,8 +76,6 @@ size_t stack_buffer_copy(FILE* reader, FILE* writer) {
 		}
 		total_bytes += bytes_read;
 	}
-
-	free(buffer);
 
 	return total_bytes;
 }
