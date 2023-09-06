@@ -1,4 +1,4 @@
-#include "mcp.hh"
+#include "mcp.hpp"
 
 int main(int argc, char** argv) {
 	if (argc != 3) {

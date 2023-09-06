@@ -1,4 +1,4 @@
-#include "mcp.hh"
+#include "mcp.hpp"
 #include <filesystem>
 
 void copy(const char* src, const char* dst) {
