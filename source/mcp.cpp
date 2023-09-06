@@ -56,10 +56,14 @@ size_t stack_buffer_copy(FILE* reader, FILE* writer) {
 #ifdef _WIN32
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
-
 	const size_t BUFFSIZE = si.dwPageSize;
 #else
-	const size_t BUFFSIZE = sysconf(_SC_PAGESIZE);
+	const size_t pagesize = sysconf(_SC_PAGESIZE);
+	struct stat st;
+	fstat(reader->_file, &st);
+
+	const size_t scale = (size_t)std::ceil(st.st_size / pagesize) % 16 + 1;
+	const size_t BUFFSIZE = pagesize * scale;
 #endif
 
 	size_t total_bytes = 0;

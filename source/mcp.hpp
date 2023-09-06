@@ -14,6 +14,7 @@
 #ifdef __APPLE__
 #include <sys/attr.h>
 #include <sys/clonefile.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #endif
 
