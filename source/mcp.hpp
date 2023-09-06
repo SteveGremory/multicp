@@ -23,5 +23,6 @@
 #endif
 
 size_t stack_buffer_copy(FILE* reader, FILE* writer);
+size_t stack_buffer_copy(const char* src, const char* dst);
 
 void copy(const char* src, const char* dst);
